@@ -93,9 +93,6 @@ if (!REGION) {
 }
 
 var TARGET = process.env.ENDPOINT || argv._[0];
-if (!TARGET.match(/^https?:\/\//)) {
-    TARGET = 'https://' + TARGET;
-}
 
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
@@ -124,10 +121,33 @@ function getCredentials(req, res, next) {
 }
 
 var options = {
-    target: TARGET,
     changeOrigin: true,
     secure: true
 };
+
+var CERT=argv.c;
+
+var SERVER_CA_CERT_PATH = process.env.SERVER_CA_CERT_PATH;
+
+if (CERT == yes) {
+    if (SERVER_CA_CERT_PATH !== undefined) {
+     options.target = {
+        host: TARGET,
+        protocol: 'https:',
+        ca: fs.readFileSync(SERVER_CA_CERT_PATH, 'utf8')
+     };
+     }else {
+       console.error('Server certificate needs to be set in the Environment Variable as SERVER_CA_CERT_PATH');
+       yargs.showHelp();
+       process.exit(1);
+ }
+ } else {
+     options.target = {
+        host: TARGET,
+        protocol: 'https:'
+     };
+ 
+ }
 
 var proxy = httpProxy.createProxyServer(options);
 
