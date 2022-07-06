@@ -1,5 +1,5 @@
 {
-  "name": "@CiscoM31/aws-es-kibana",
+  "name": "@ciscom31/aws-es-kibana",
   "version": "1.0.0",
   "description": "AWS ElasticSearch/Kibana Proxy",
   "main": "index.js",
