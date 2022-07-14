@@ -66,6 +66,13 @@ var yargs = require('yargs')
       demand: false,
       describe: 'request limit'
     })
+    .option('c', {
+        alias: 'cert',
+        default: process.env.CERT || 'yes',
+        demand: false,
+        describe: 'server cert validation',
+        type: 'string'
+    })
     .help()
     .version()
     .strict();
@@ -129,7 +136,7 @@ var CERT=argv.c;
 
 var SERVER_CA_CERT_PATH = process.env.SERVER_CA_CERT_PATH;
 
-if (CERT == yes) {
+if (CERT == 'yes') {
     if (SERVER_CA_CERT_PATH !== undefined) {
      options.target = {
         host: TARGET,
