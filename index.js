@@ -112,12 +112,18 @@ var PROFILE = process.env.AWS_PROFILE;
 if (!PROFILE) {
     var chain = new AWS.CredentialProviderChain();
     chain.resolve(function (err, resolved) {
-        if (err) throw err;
-        else credentials = resolved;
-    });
+        if (err) {
+            console.error('Error resolving credentials:', err);
+            throw err;
+        } else {
+            credentials = resolved;
+            console.log('Resolved credentials:', credentials);
+        }});
+
 } else {
     credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
     AWS.config.credentials = credentials;
+    console.log('Loaded credentials from profile:', credentials);
 }
 
 function getCredentials(req, res, next) {
